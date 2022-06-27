@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<a style="margin-left: 170px" th:href="@{/index}">Trang chủ</a>
+<h2 style="text-align: center">Borrow Book</h2>
+<form method="post" th:action="@{/book/borrow}" th:object="${borrowBook}">
+    <div th:if="${failed!=null}" class="alert alert-danger alert-dismissible">
+        <div style="text-align: center;color: red" th:text="${failed}"></div>
+    </div>
+    <div th:if="${success!=null}" class="alert alert-success alert-dismissible">
+        <div style="text-align: center;color: red" th:text="${success}"></div>
+    </div>
+    <table style="margin: auto">
+        <tr>
+            <td style="color: red" th:if="${param.errorMss} != null "><span th:text="${param.errorMss}"></span></td>
+        </tr>
+
+        <caption colspan="12" style="text-align: center; background: cadetblue">Borrow a Book</caption>
+
+        <tr>
+            <td>Write the book id:</td>
+            <td>
+                <div>
+                    <div>
+                        <label class="my-1 mr-2" for="inlineFormCustomSelectPref"></label>
+                        <select required th:field="*{bookID}" class="custom-select my-1 mr-sm-2"
+                                id="inlineFormCustomSelectPref">
+                            <option value="1" selected>ID-Subject-Title</option>
+                            <option th:each="book : ${books}" th:value="${book.id}"
+                                    th:text="${book.id + '-' + book.subject + '-' +book.title}"></option>
+                        </select>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Write the member id:</td>
+            <td>
+                <div>
+                    <label class="my-1 mr-2" for="inlineFormCustomSelectPreff"></label>
+                    <select required th:field="*{memberID}" class="custom-select my-1 mr-sm-2"
+                            id="inlineFormCustomSelectPreff">
+                        <option value="1" selected>ID-Name</option>
+                        <option required th:each="member : ${members}" th:value="${member.id}"
+                                th:text="${member.id + '-' + member.name}"></option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>The current date:</td>
+            <td>
+                <input th:value="${createDate}" readonly type="date" name="createDate">
+            </td>
+        </tr>
+
+        <tr>
+            <td>The return date:</td>
+            <td>
+                <input type="date" max="2022-11-10" th:field="*{returnDate}" required>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button type="submit">Borrow</button>
+            </td>
+            <td><a href="/index">Cancel</a></td>
+        </tr>
+    </table>
+
+
+</form>
+
+</body>
+</html>

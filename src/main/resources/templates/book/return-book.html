@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+</head>
+<body>
+<a th:href="@{/index}">Trang Chủ</a>
+<h2>BOOK INFORMATION</h2>
+<form th:action="@{/books/return}" th:object="${borrowBooks}">
+    <table>
+        <tr>
+            <td>Return a book:</td>
+        </tr>
+        <tr>
+            <td>BBID:</td>
+            <td>
+                <input type="text" th:value="${borrowBooks.id}" size="30px">
+            </td>
+        </tr>
+        <tr>
+            <td>MemberID:</td>
+            <td>
+                <input type="text" th:value="${borrowBooks.memberID}" size="30px">
+            </td>
+        </tr>
+        <tr>
+            <td>BookID:</td>
+            <td>
+                <input type="text" th:value="${borrowBooks.bookID}" size="30px">
+            </td>
+        </tr>
+        <tr>
+            <td>Fine/Day:</td>
+            <td>
+                <input type="text" th:value="${borrowBooks.returnDate}" size="30px">
+            </td>
+        </tr>
+        <tr>
+            <td>Total fine amount:</td>
+            <td>
+                <input type="text" name="" value="" size="30px" readonly>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit">Return</button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="button" th:onclick="|backToSmt()|"><a href="/books/borrowed">Cancel</a></button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

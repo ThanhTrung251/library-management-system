@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
+    <meta charset="UTF-8"/>
+    <title>List</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+</head>
+<body>
+<a style="margin-left: 170px" th:href="@{/index}">Trang Chủ</a>
+<h2 style="text-align: center">List All Book</h2>
+
+<form method="POST" th:action="@{/books/search}" th:object="${searchBookForm}">
+    <div class="form-group" style="text-align: center">
+        <input style="margin-left: 500px;width:270px;"  type="text" name="keyword" th:field="*{keyword}" class="form-control"
+               placeholder="search by subject or title">
+    </div>
+
+    <div style="text-align: center">
+        <p>Avalible:
+            <input type="checkbox" th:value="AVAILABLE" th:field="*{available}"/>
+            <input type="hidden" name="!available" value="off"/>
+
+        Borrow:
+            <input type="checkbox" th:value="BORROW" th:field="*{borrow}"/>
+            <input type="hidden" name="!borrow" value="off"/>
+
+        Reserve:
+            <input type="checkbox" th:value="RESERVE" th:field="*{reserve}"/>
+            <input type="hidden" name="!reserve" value="off" />
+        </p>
+    </div>
+    <!--    <div>-->
+    <!--        <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Edition</label>-->
+    <!--        <select th:field="*{edition}" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">-->
+
+    <!--            <option th:each="book : ${listBooks}" th:value="${book.getEdition()}"-->
+    <!--                    th:text="${book.getEdition()}"></option>-->
+    <!--        </select>-->
+    <!--    </div>-->
+    <div style="text-align: center">
+        Edittion
+        <input type="number" name="quantity" min="0" max="1000" th:field="*{edition}" th:value="0" required>
+    </div>
+    <br/><br/>
+    <div style="text-align: center">
+        <button type="submit">Search</button>
+    </div>
+</form>
+<br/><br/>
+<a style="margin-left: 170px" href="/books/add">Add Book</a>
+<br/><br/>
+<div>
+    <table border="1" style="margin: auto">
+        <tr>
+            <th>Book id</th>
+            <th>Subject</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>publisher</th>
+            <th>Copyright</th>
+            <th>Edittion</th>
+            <th>Pages</th>
+            <th>NumberOfBooks</th>
+            <th>Library</th>
+            <th>Available</th>
+            <th>Action</th>
+
+        </tr>
+        <tr th:each="book : ${books}">
+            <td th:utext="${book.getBookId()}">...</td>
+            <td th:utext="${book.getBookSubject()}">...</td>
+            <td th:utext="${book.getBookTitle()}">...</td>
+            <td th:utext="${book.getAuthorName()}">...</td>
+            <td th:utext="${book.getPublisherName()}">...</td>
+            <td th:utext="${book.getCopyRight()}">...</td>
+            <td th:utext="${book.getEdition()}">...</td>
+            <td th:utext="${book.getPages()}">...</td>
+            <td th:utext="${book.getNumberOfBook()}">...</td>
+            <td th:utext="${book.getLibrary()}">...</td>
+            <td th:if="${#strings.toString(book.getBookStatus())} == 'AVAILABLE'">
+                <input type="checkbox" checked/>
+            </td>
+            <td th:unless="${#strings.toString(book.getBookStatus())} == 'AVAILABLE'">
+                <input type="checkbox"/>
+            </td>
+            <td>
+                <button type="button"><a th:href="@{'/books/update?id='+ ${book.getBookId()}}">Update Book</a></button>
+                <button type="submit">Delete</button>
+            </td>
+
+        </tr>
+    </table>
+</div>
+</body>
+</html>

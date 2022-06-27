@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<a style="margin-left: 170px" href="index">Trang Chủ</a>
+<h1 style="text-align: center">List all Member</h1>
+<br/><br/>
+<form>
+    <div class="form-group">
+        <input style="margin-left: 500px;width:270px" type="text" name="keyword"
+               placeholder="Search by name or email">
+        <button type="submit">Search</button>
+    </div>
+</form>
+<a style="margin-left: 400px" href="/member">Add Member</a>
+<div>
+    <table border="1" style="margin: auto">
+        <tr>
+            <th>Member id</th>
+            <th>name</th>
+            <th>email</th>
+            <th>major</th>
+            <th>expired</th>
+        </tr>
+        <tr th:each="memberDTO : ${memberDTOList}">
+            <td th:utext="${memberDTO.id}"></td>
+            <td th:utext="${memberDTO.name}"></td>
+            <td th:utext="${memberDTO.mail}"></td>
+            <td th:utext="${memberDTO.major}"></td>
+            <td th:utext="${memberDTO.expired}"></td>
+
+            <td>
+                <button type="button"><a th:href="@{'/member/update?id='+ ${memberDTO.id}}">Update Book</a></button>
+                <button type="submit">Delete</button>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

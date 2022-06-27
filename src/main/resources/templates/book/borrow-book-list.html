@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>library-management-system</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+</head>
+<body>
+<a style="margin-left: 170px" th:href="@{/index}">Trang Chủ</a>
+<h2 style="text-align: center">THE LIST FOR THE BORROWED BOOKS</h2>
+<p style="margin-left: 170px">Borrowed book:</p>
+<form>
+    <input type="text" name="keyword" placeholder="Search title/subject" style="margin-left: 170px">
+    <button type="submit">Search</button>
+    <button type="button"><a href="/books/reserve">ReserveBook</a></button>
+    <button type="button"><a href="/books">Cancel</a></button>
+</form>
+<table border="1" style="text-align:center; margin: auto; height: max-content; width: 1200px">
+    <tr>
+        <td colspan="12" style="text-align: center; background: cadetblue">print the book</td>
+    </tr>
+    <tr>
+        <td> BorrowID</td>
+        <td> Member</td>
+        <td> BookID</td>
+        <td> Subject</td>
+        <td> Title</td>
+        <td> Author</td>
+        <td> Publisher</td>
+        <td> Copyright</td>
+        <td> Edition</td>
+        <td> Pages</td>
+        <td> Library</td>
+    </tr>
+    <tr th:each="borrowBook : ${borrowBooks}">
+        <td th:utext="${borrowBook.getBorrowBookID()}"></td>
+        <td th:utext="${borrowBook.getName()}"></td>
+        <td th:utext="${borrowBook.getBookId()}"></td>
+        <td th:utext="${borrowBook.getBookSubject()}"></td>
+        <td th:utext="${borrowBook.getBookTitle()}"></td>
+        <td th:utext="${borrowBook.getAuthorName()}"></td>
+        <td th:utext="${borrowBook.getPublisherName()}"></td>
+        <td th:utext="${borrowBook.getCopyRight()}"></td>
+        <td th:utext="${borrowBook.getEdition()}"></td>
+        <td th:utext="${borrowBook.getPages()}"></td>
+        <td th:utext="${borrowBook.getLibrary()}"></td>
+        <td>
+            <button type="button">
+                <a th:href="@{'/books/return?id='+ ${borrowBook.getBorrowBookID()}}">Return</a>
+            </button>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

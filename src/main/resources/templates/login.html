@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <h1>Welcome</h1>
+
+        <form th:action="@{j_spring_security_check}" class="form" method="POST">
+            <div th:if="${param.error}">
+                <div class="">
+                    username hoac password khong ton tai
+                </div>
+            </div>
+
+            <div th:if="${param.logout}">
+                <div class="">
+                    Bạn đã logout
+                </div>
+            </div>
+
+
+            <input type="text" placeholder="Username" name="username">
+            <input type="password" placeholder="Password" name="password">
+            <button type="submit" id="login-button">Login</button>
+        </form>
+    </div>
+
+
+</div>
+</body>
+</html>

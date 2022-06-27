@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <style>
+        .error {
+            color: orange;
+            font-size: 15px;
+        }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add Member</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"
+            type="text/javascript"></script>
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+<a style="margin-left: 30px" th:href="@{/index}">Trang Chủ</a>
+<div class="wrapper">
+
+    <div>
+        <div id="alert"></div>
+        <form method="POST" id="demoForm" th:action="@{/do-add-member}" th:object="${member}"
+              onsubmit="onSubmit(event)">
+
+            <div class="form-group">
+                <label>Họ tên &emsp; &emsp; </label>
+                <input id="name1" type="text" th:field="*{name}" class="form-control"
+                       placeholder="name" required name="name">
+            </div>
+
+            <div class="form-group">
+                <label>Chuyên ngành &emsp; &emsp; &emsp;</label>
+                <input id="major1" type="text" th:field="*{major}" class="form-control" placeholder="major"
+                       name="major" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mail</label>
+                <input id="mail1" type="email" th:field="*{mail}" class="form-control"
+                       placeholder="mail" name="mail" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input id="password" type="password" th:field="*{password}" class="form-control"
+                       placeholder="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nhập lại mật khẩu</label>
+                <input id="rePassword" type="password" th:field="*{rePassword}" class="form-control"
+                       placeholder="password" name="rePassword" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ngày hết hạn</label>
+                <input id="expired1" type="date" th:field="*{expired}" class="form-control"
+                       placeholder="expired" name="expired" required>
+            </div>
+
+            <div class="form-group">
+                <label>Sinh nhật</label>
+                <input id="birthday1" type="date" th:field="*{birthday}" class="form-control"
+                       placeholder="birthday" name="birthday" required>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary" id="btn-submit" disabled>Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.validator.addMethod('EqualTo', function (value, element, param) {
+            let str1 = value || '';
+            let str2 = $(param).val() || '';
+            return $.trim(str1) == $.trim(str2);
+        }, 'Hai mật khẩu không giống nhau');
+
+        $.validator.addMethod('validatePassword', function (value) {
+            return /^[A-Za-z0-9\d=!\-@._*]*$/.test(value)
+                && /[A-Z]/.test(value)
+                && /\d/.test(value)
+        }, 'Hãy nhập mật khẩu ít nhất 12 ký tự bao gồm chữ hoa, ít nhất một chữ số, kí hiệu đặc biệt và không khoảng trắng');
+
+        $("#demoForm").validate({
+            onfocusout: false,
+            onkeyup: false,
+            onclick: false,
+            rules: {
+                "name": {
+                    required: true,
+                    maxlength: 15
+                },
+                "password": {
+                    required: true,
+                    validatePassword: true,
+                },
+                "rePassword": {
+                    required: true,
+                    EqualTo: "#password",
+                },
+                "major": {
+                    required: true,
+                    minlength: 5
+                },
+                "mail": {
+                    required: true,
+                },
+                "expired": {
+                    required: true,
+                },
+                "birthday": {
+                    required: true,
+                },
+            },
+            messages: {
+                "name": {
+                    required: "Bắt buộc nhập tên",
+                    maxlength: "Hãy nhập tối đa 15 ký tự"
+                },
+                "password": {
+                    required: "Bắt buộc nhập mật khẩu",
+                },
+                "rePassword": {
+                    required: "Vui lòng nhập lại mật khẩu",
+                    EqualTo: "Hai password phải giống nhau",
+                },
+                "major": {
+                    required: "bắt buộc nhập chuyên ngành",
+                    minlength: "hãy nhập ít nhất 5 kí tự"
+                },
+                "mail": {
+                    required: "Bắt buộc nhập mail",
+                },
+                "expired": {
+                    required: "bắt buộc nhập ngày"
+                },
+                "birthday": {
+                    required: "bắt buộc nhập ngày"
+                },
+            }
+        });
+    });
+
+    $('input').on('keyup focusout blur', function () {
+        if ($("#demoForm").valid()) {
+            $("#btn-submit").attr("disabled", false)
+        } else {
+            $("#btn-submit").attr("disabled", "disabled")
+        }
+    });
+
+    let onSubmit = (event) => {
+        event.preventDefault();
+        if ($("#demoForm").valid()) {
+            let member = {
+                name: $("#name1").val(),
+                password: $("#password").val(),
+                mail: $("#mail1").val(),
+                major: $("#major1").val(),
+                rePassword: $("#rePassword").val(),
+                expired: $("#expired1").val(),
+                birthday: $("#birthday1").val(),
+            }
+            console.log(member)
+            handleSubmit(member);
+        }
+    }
+
+    function handleSubmit(data) {
+        $.ajax({
+            url: `${baseUrl}/member`,
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: 'application/json',
+
+        }).done(function (xhr) {
+            console.log(xhr);
+
+            $("#alert").empty();
+            $("#alert").append(`
+                            <div class="alert alert-success alert-dismissible " role="alert">
+                                Thêm thành công
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+            `)
+
+            $("#name1").val("");
+            $("#password").val("");
+            $("#mail1").val("");
+            $("#major1").val("");
+            $("#rePassword").val("");
+            $("#expired1").val("");
+            $("#birthday1").val("");
+
+        }).fail(function (xhr) {
+            console.log(xhr);
+            $("#alert").empty();
+            $("#alert").append(`
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            ${xhr.responseJSON.message}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+            `)
+        })
+    }
+</script>
+
+</body>
+</html>
+

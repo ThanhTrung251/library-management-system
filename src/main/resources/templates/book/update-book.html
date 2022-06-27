@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOK INFORMATION</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+</head>
+<body>
+<a th:href="@{/index}">Trang Chủ</a>
+<h2 style="text-align: center">BOOK INFORMATION</h2>
+<div id="alert" style="margin-left: 400px; color: red">
+</div>
+<form onsubmit="onSubmit(event)">
+    <div class="content">
+        <div>
+            <form method="post" th:action="@{/book}" th:object="${book}">
+                <table style="margin: auto">
+                    <tr>
+                        <td>BoodID:</td>
+                        <td>
+                            <input readonly type="text" size="30px" th:value="${book.id}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The book subject:</td>
+                        <td>
+                            <input type="text" id="subject1" size="30px" th:value="${book.subject}"
+                                   th:field="*{subject}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The book title:</td>
+                        <td>
+                            <input type="text" id="title1" size="30px" th:value="${book.title}" th:field="*{title}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The name of the Author(s):</td>
+                        <td>
+                            <label class="my-1 mr-2" for="author1"></label>
+                            <select id="author1" th:field="*{authorIds}" class="custom-select my-1 mr-sm-2">
+                                <option th:each="author : ${authors}" th:value="${author.id}"
+                                        th:text="${author.name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The name of the Publisher:</td>
+                        <td>
+                            <label class="my-1 mr-2" for="publisher1"></label>
+                            <select id="publisher1" th:field="*{publisherID}" th class="custom-select my-1 mr-sm-2">
+                                <option th:each="publisher : ${publishers}" th:value="${publisher.id}"
+                                        th:text="${publisher.name}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Copyright for the book:</td>
+                        <td>
+                            <input type="text" id="copyright1" size="30px" th:value="${book.copyright}"
+                                   th:field="*{copyright}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The edition number:</td>
+                        <td>
+                            <input type="text" id="edition1" size="30px" th:value="${book.edition}"
+                                   th:field="*{edition}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The number of Pages:</td>
+                        <td>
+                            <input type="text" id="pages1" size="30px" th:value="${book.pages}" th:field="*{pages}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Number of Book:</td>
+                        <td>
+                            <input type="text" id="number1" size="30px" th:value="${book.numberOfBook}"
+                                   th:field="*{numberOfBook}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>The name of the library:</td>
+                        <td>
+                            <input type="text" id="library1" size="30px" th:value="${book.library}"
+                                   th:field="*{library}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit">Update the Information</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="button"><a href="/books">Cancel</a></button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</form>
+
+<script th:inline="javascript">
+    let authors = [];
+    let id = [[${book.id}]]
+    console.log(id);
+    $("#author1").change(event => {
+        let {value} = event.target;
+        if (value == 0) return;
+        console.log(value)
+        let index = authors.findIndex(au => au.id == value);
+        if (index == -1) {
+            let name = $("#author1 option:selected").text();
+            let author = {
+                id: value,
+                name: name
+            };
+            authors.push(author)
+            $("#authorsSelected").append(`
+                <span>${author.name} </span> &nbsp;&nbsp;
+           `)
+        }
+    })
+    let onSubmit = (event) => {
+        event.preventDefault();
+        let authorsList = [];
+        authors.forEach(au => {
+            authorsList.push(au.id);
+        })
+        let book = {
+            publisherId: $("#publisher1").val(),
+            copyright: $("#copyright1").val(),
+            authors: authorsList,
+            subject: $("#subject1").val(),
+            title: $("#title1").val(),
+            pages: $("#pages1").val(),
+            number: $("#number1").val(),
+            edition: $("#edition1").val(),
+            library: $("#library1").val(),
+        }
+        console.log(book)
+
+        handleSubmit(book);
+    }
+
+    function handleSubmit(data) {
+        $.ajax({
+            url: `${baseUrl}/api/v1/books/update?id=${id}`,
+            type: "POST",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: 'application/json',
+        }).done(function (xhr) {
+            console.log(xhr);
+            authors = [];
+            $("#alert").empty();
+            $("#alert").append(`Update Success`)
+            $("#author1").val(0);
+            $("#authorsSelected").empty();
+
+            $("#publisher1").val("");
+            $("#copyright1").val("");
+            $("#subject1").val("");
+            $("#title1").val("");
+            $("#pages1").val("");
+            $("#number1").val("");
+            $("#edition1").val("");
+            $("#library1").val("");
+
+
+        }).fail(function (xhr) {
+            console.log(xhr);
+            $("#alert").empty();
+            $("#alert").append(`${xhr.responseJSON.message}`)
+        })
+    }
+</script>
+</body>
+</html>

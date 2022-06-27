@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Welcome</title>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/admin_lte/dist/css/adminlte.min.css}">
+    <script th:src="@{/admin_lte/plugins/jquery/jquery.min.js}"></script>
+    <script th:src="@{/admin_lte/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/admin_lte/js/index.js}"></script>
+    <script th:src="@{/admin_lte/dist/js/adminlte.min.js}"></script>
+</head>
+<body>
+<h1>Library manager system</h1>
+<ul>
+    <li>
+        <a th:href="@{/index}">Trang Chủ</a>
+    </li>
+    <li>
+        <a href="#">Book</a>
+        <ul>
+            <li>
+                <a th:href="@{/books}">List Book</a>
+            </li>
+            <li>
+                <a th:href="@{/books/add}">Add Book</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Member</a>
+        <ul>
+            <li>
+                <a th:href="@{/members}">List Member</a>
+            </li>
+            <li>
+                <a th:href="@{/member}">Add Member</a>
+            </li>
+            <li>
+                <a href="#">Update Member</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a th:href="@{/books/borrowed}">List Borrow Book</a>
+    </li>
+    <li>
+        <a th:href="@{/books/reserve}">Reserve Book</a>
+    </li>
+    <li>
+        <a th:href="@{book/borrow}">Borrow Book</a>
+    </li>
+<!--    Add logout button-->
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Logout">
+    </form>
+</ul>
+</body>
+</html>
+
